@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>exception error search page</title>
+
+    <!-- datepicker -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+    <script>
+        $( function() {
+            $( ".datepicker" ).datepicker();
+        } );
+    </script>
+    <!-- datepicker -->
+
+    <!-- page template -->
+    <!-- Bootstrap Core CSS -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- page template -->
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <!-- Sidebar [NAV] -->
+    <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="/" style="color: white">
+                    <h3>Exception Search</h3>
+                </a>
+            </li>
+            <hr>
+
+            <!-- 검색조건설정-->
+            <form action="/search" method="post">
+                <!-- logLevel -->
+                <li>
+                    <div class="form-group">
+                        <label for="logLevel" style="color: white">[logLevel]</label><br/>
+                        <select class="from-control input-lg btn-block" name="logLevel" id="logLevel" >
+                            <option>all</option>
+                            <option>error</option>
+                            <option>warn</option>
+                            <option>info</option>
+                            <option>debug</option>
+                        </select>
+                    </div>
+                </li>
+                <hr/>
+
+                <!-- ErrorTYPE -->
+                <li>
+                    <div class="form-group">
+                        <label for="eName" style="color: white">[eName]</label>
+                        <select class="form-control input-lg" name="eName" id="eName">
+                            <option>All</option>
+                            <option>EvalError</option>
+                            <option>SyntaxError</option>
+                            <option>RangeError</option>
+                            <option>ReferenceError</option>
+                            <option>TypeError</option>
+                            <option>URIError</option>
+                        </select>
+                    </div>
+                </li>
+                <hr/>
+
+                <!-- externalIP -->
+                <li>
+                    <div class="form-group">
+                        <label for="eIP" style="color: white">[externalIP]</label>
+                        <select class="form-control input-lg" name="eIP" id="eIP">
+                            <option>all</option>
+                            <option>203.249.127.43</option>
+                        </select>
+                    </div>
+                </li>
+                <hr/>
+
+                <!-- localIP -->
+                <li>
+                    <div class="form-group">
+                        <label for="lIP" style="color: white">[LocalIP]</label>
+                        <select class="form-control input-lg" name="lIP" id="lIP">
+                            <option>all</option>
+                            <option>192.9.44.183</option>
+                        </select>
+                    </div>
+                </li>
+                <hr/>
+
+                <!-- Date Setting -->
+                <li>
+                    <h3 style="color: white">[Date Setting]</h3>
+                    <h4 style="color: white">Start_Date: <br/><br/><input type="text" class="datepicker form-control" name="sDate" value="08/01/2016"></h4>
+                    <h4 style="color: white">End_Date: <br/><br/><input type="text" class="datepicker form-control" name="eDate" value="12/31/2016"></h4>
+                </li>
+                <hr/>
+
+                <!-- SUMMIT-->
+                <li>
+                    <input type="submit" class="btn btn-info input-lg btn-block" value="Exception_Search">
+                </li>
+
+            </form>
+
+
+            <hr>
+        </ul>
+    </div>
+    <!-- Sidebar [NAV] -->
+
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <h1>Exception Log Data
+                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Exception Setting</a>
+                    </h1>
+
+                    <!-- exception table -->
+                    <div class="container">
+                        <h2>[Exception] logLevel : <%= logLevel %>, eName : <%= eName %>, counts : <%= data.length%></h2>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>eIP</th>
+                                    <th>lIP</th>
+                                    <th>logLevel</th>
+                                    <th>logMessage</th>
+                                    <th>eName</th>
+                                    <th>eMessage</th>
+                                    <th>eStack</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <% for(var i = 0; i < data.length; i++) { %>
+                                <tr>
+                                    <td><%= i + 1 %></td>
+                                    <td><%= data[i].Date.getYear()+1900+"."+parseInt(data[i].Date.getMonth()+1)+"."+data[i].Date.getDate() %></td>
+                                    <td><%= data[i].eIP %></td>
+                                    <td><%= data[i].lIP %></td>
+                                    <td><%= data[i].logLevel %></td>
+                                    <td><%= data[i].logMessage %></td>
+                                    <td><%= data[i].eName %></td>
+                                    <td><%= data[i].eMessage %></td>
+                                    <td><%= data[i].eStack %></td>
+                                </tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- exception table -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+
+<!-- ============================================================ footer CSS ============================================================ -->
+<!-- page template -->
+<!-- jQuery -->
+<!--<script src="js/jquery.js"></script>-->
+<!-- Bootstrap Core JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+<!-- Menu Toggle Script -->
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+<!-- Menu Toggle Script -->
+<!-- page template -->
+
+<!-- bootstrap CDN -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<!-- bootstrap CDN -->
+
+</body>
+</html>
